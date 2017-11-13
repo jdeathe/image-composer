@@ -4,44 +4,24 @@ Docker image of the [Composer](https://github.com/jadu/meteor) dependency manage
 
 *WARNING:* This is currently WIP - NOT ready for general use.
 
-## Building
+## Supported tags and respective `Dockerfile` links
 
-### Clean
-
-```
-$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
-  do \
-    cd ${BUILD_DIR} && \
-    make clean; \
-    cd - &> /dev/null; \
-  done
-```
-
-### Build
-
-```
-$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
-  do \
-    cd ${BUILD_DIR} && \
-    make; \
-    cd - &> /dev/null; \
-  done
-```
-
-### Install
-
-```
-$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
-  do \
-    cd ${BUILD_DIR} && \
-    make install; \
-    cd - &> /dev/null; \
-  done
-```
+- `1.5.2-php56`, `latest` [(php56/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php56/Dockerfile)
+- `1.5.2-php70` [(php70/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php70/Dockerfile)
+- `1.5.2-php71` [(php71/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php71/Dockerfile)
 
 ## Extract run template
 
-Run template for use on [Project Atomic's](http://www.projectatomic.io/) based environments.
+Run template for use on [Project Atomic's](http://www.projectatomic.io/) based environments where the [`atomic run`](https://github.com/projectatomic/atomic#atomic-run) command is available.
+
+### Pull the image.
+
+```
+$ docker pull \
+  jdeathe/composer:1.5.2-php56
+```
+
+### Inspect the run label.
 
 ```
 $ docker inspect \
