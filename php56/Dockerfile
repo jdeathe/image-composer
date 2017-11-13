@@ -11,6 +11,7 @@ ARG PHP_PACKAGE_PREFIX="php56"
 ARG COMPOSER_CACHE_DIR="${COMPOSER_INSTALL_PATH}/var/cache"
 ARG COMPOSER_HOME="${COMPOSER_INSTALL_PATH}/etc"
 ARG COMPOSER_RELEASE_URI="https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/${COMPOSER_FILENAME}"
+ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
 
 RUN \
 	apk add \
@@ -28,6 +29,7 @@ RUN \
 		--virtual .build-deps \
 		autoconf \
 		automake \
+		bash \
 		curl-dev \
 		gcc \
 		g++ \
@@ -37,8 +39,12 @@ RUN \
 		pkgconfig \
 		re2c \
 		zlib-dev \
-	&& pecl install \
-		apcu-4.0.10 \
+	&& if [[ ${PHP_VERSION%%.*} == 5 ]]; \
+		then \
+			pecl install apcu-4.0.11; \
+		else \
+			pecl install apcu-5.1.8; \
+		fi \
 	&& docker-php-ext-enable \
 		apcu \
 	&& docker-php-ext-install \
@@ -96,7 +102,6 @@ ENV \
 	http_proxy="" \
 	no_proxy=""
 
-ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
 LABEL \
 	maintainer="James Deathe <james.deathe@gmail.com>" \
 	run="\

@@ -1,5 +1,7 @@
 
 define DOCKER_BUILD_ARGS
+--force-rm \
+--file $(PHP_PACKAGE_PREFIX)/Dockerfile \
 --build-arg "COMPOSER_CACHE_DIR=$(COMPOSER_CACHE_DIR)" \
 --build-arg "COMPOSER_FILENAME=$(COMPOSER_FILENAME)" \
 --build-arg "COMPOSER_HOME=$(COMPOSER_HOME)" \

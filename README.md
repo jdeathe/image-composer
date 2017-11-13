@@ -6,42 +6,36 @@ Docker image of the [Composer](https://github.com/jadu/meteor) dependency manage
 
 ## Building
 
-### Remove local image tags
+### Clean
 
 ```
-$ for VERSION in 7.1.11 7.0.25 5.6.32; \
+$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
   do \
-    COMPOSER_VERSION=1.5.2 \
-    PHP_VERSION=${VERSION} \
-    PHP_PACKAGE_PREFIX=php${${PHP_VERSION%.*}//./} \
-    DOCKER_IMAGE_TAG=${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX} \
+    cd ${BUILD_DIR} && \
     make clean; \
+    cd - &> /dev/null; \
   done
 ```
 
-### Build image tags
+### Build
 
 ```
-$ for VERSION in 7.1.11 7.0.25 5.6.32; \
+$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
   do \
-    COMPOSER_VERSION=1.5.2 \
-    PHP_VERSION=${VERSION} \
-    PHP_PACKAGE_PREFIX=php${${PHP_VERSION%.*}//./} \
-    DOCKER_IMAGE_TAG=${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX} \
+    cd ${BUILD_DIR} && \
     make; \
+    cd - &> /dev/null; \
   done
 ```
 
-### Build local binary
+### Install
 
 ```
-$ for VERSION in 7.1.11 7.0.25 5.6.32; \
+$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
   do \
-    COMPOSER_VERSION=1.5.2 \
-    PHP_VERSION=${VERSION} \
-    PHP_PACKAGE_PREFIX=php${${PHP_VERSION%.*}//./} \
-    DOCKER_IMAGE_TAG=${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX} \
+    cd ${BUILD_DIR} && \
     make install; \
+    cd - &> /dev/null; \
   done
 ```
 
