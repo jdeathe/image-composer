@@ -23,18 +23,11 @@ $ docker pull \
 
 ### Inspect the run label.
 
+The run label provides the `docker run` usage template.
+
 ```
 $ docker inspect \
   --format '{{ .ContainerConfig.Labels.run }}' \
-  --type=image \
-  jdeathe/composer:1.5.2-php56
-```
-
-## Extract image description
-
-```
-$ docker inspect \
-  --format '{{ index .ContainerConfig.Labels "org.deathe.description" }}' \
   --type=image \
   jdeathe/composer:1.5.2-php56
 ```
