@@ -76,12 +76,17 @@ RUN \
 		"${COMPOSER_INSTALL_PATH}"/bin/composer \
 		/usr/local/bin/composer \
 	&& printf -- \
-		'memory_limit=-1\n' \
-		> "${PHP_INI_DIR}/conf.d/memory-limit.ini" \
-	&& printf -- \
 		'date.timezone=%s\n' \
 		"${PHP_TIMEZONE:-UTC}" \
-		> "${PHP_INI_DIR}/conf.d/date_timezone.ini"
+		> "${PHP_INI_DIR}/conf.d/date.ini" \
+	&& printf -- \
+		'memory_limit=-1\n' \
+		> "${PHP_INI_DIR}/conf.d/resource-limits.ini" \
+	&& printf -- \
+		'%s\n%s\n%s\n' \
+		"opcache.enable_cli=1" \
+		"opcache.max_accelerated_files=32531" \
+		> ${PHP_INI_DIR}/conf.d/opcache.ini \
 
 ENV \
 	COMPOSER_ALLOW_SUPERUSER="1" \
