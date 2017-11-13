@@ -17,7 +17,7 @@ Targets:
                             saved as a tar archive, compressed with xz.
   distclean                 Clean up distribution artifacts.
   help                      Show this help.
-  install                   Install the alias to run the docker image.
+  install                   Install the bash package.
   images                    Show container's image details.
   load                      Loads from the distribution package. Requires 
                             DOCKER_IMAGE_TAG variable.
