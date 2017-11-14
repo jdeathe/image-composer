@@ -86,7 +86,7 @@ RUN \
 		'%s\n%s\n%s\n' \
 		"opcache.enable_cli=1" \
 		"opcache.max_accelerated_files=32531" \
-		> ${PHP_INI_DIR}/conf.d/opcache.ini \
+		> ${PHP_INI_DIR}/conf.d/opcache.ini
 
 ENV \
 	COMPOSER_ALLOW_SUPERUSER="1" \
