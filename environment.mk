@@ -19,8 +19,8 @@ DOCKER_IMAGE_TAG ?= latest
 DOCKER_RESTART_POLICY ?= no
 
 # Package install settings
-WRAPPER_NAME ?= composer
 BIN_PREFIX ?= /usr/local
+WRAPPER_NAME ?= composer
 
 # Docker build --no-cache parameter
 NO_CACHE ?= false
