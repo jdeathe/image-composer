@@ -27,11 +27,3 @@ $ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | s
     cd - &> /dev/null; \
   done
 ```
-
-## Install
-
-Generate and install the binary on host.
-
-```
-$ make install
-```
