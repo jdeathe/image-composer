@@ -17,8 +17,8 @@ define DOCKER_CONTAINER_PARAMETERS
 \$${TTY:+--interactive} \
 \$${TTY:+--tty} \
 --volume \$${PWD}:/workspace\$${CONSISTENCY:-} \
---volume $(PACKAGE_NAME)-etc:/opt/getcomposer.org/etc\$${CONSISTENCY:-} \
---volume $(PACKAGE_NAME)-\$${PHP_PACKAGE_PREFIX}-cache:/opt/getcomposer.org/var/cache\$${CONSISTENCY:-} \
+--volume $(WRAPPER_NAME)-etc:/opt/getcomposer.org/etc\$${CONSISTENCY:-} \
+--volume $(WRAPPER_NAME)-\$${PHP_PACKAGE_PREFIX}-cache:/opt/getcomposer.org/var/cache\$${CONSISTENCY:-} \
 --env "COMPOSER_ALLOW_SUPERUSER=\"\$${COMPOSER_ALLOW_SUPERUSER:-$(COMPOSER_ALLOW_SUPERUSER)}\"" \
 --env "COMPOSER_AUTH=\"\$${COMPOSER_AUTH:-$(COMPOSER_AUTH)}\"" \
 --env "COMPOSER_BIN_DIR=\"\$${COMPOSER_BIN_DIR:-$(COMPOSER_BIN_DIR)}\"" \
@@ -41,7 +41,7 @@ define DOCKER_IMAGE_TAG_TEMPLATE
 $(COMPOSER_VERSION)-\$${PHP_PACKAGE_PREFIX}
 endef
 
-define PACKAGE_PRE_RUN
+define WRAPPER_PRE_RUN
 local CONSISTENCY; \
 local DOCKER_VERSION=\"\$$(docker version --format '{{.Client.Version}}')\"; \
 local -a DOCKER_VERSION_PARTS; \

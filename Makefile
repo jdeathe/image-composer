@@ -11,23 +11,25 @@ container image defined by the Dockerfile.
 Targets:
   all                       Combines targets build images and install.
   build                     Builds the image. This is the default target.
+  build-wrapper             Builds the run wrapper.
   clean                     Clean up build artifacts.
   dist                      Pull a release version from the registry and save a
                             package suitable for offline distribution. Image is 
                             saved as a tar archive, compressed with xz.
   distclean                 Clean up distribution artifacts.
   help                      Show this help.
-  install                   Install the bash package.
+  install                   Install the run wrapper.
   images                    Show container's image details.
   load                      Loads from the distribution package. Requires 
                             DOCKER_IMAGE_TAG variable.
   pull                      Pull the release image from the registry. Requires 
                             the DOCKER_IMAGE_TAG variable.
+  rm-wrapper                Purge run-wrapper.
   rmi                       Untag (remove) the image.
   test                      Run all test cases.
 
 Variables:
-  - BIN_PREFIX              Parent directory for /bin/PACKAGE_NAME.
+  - BIN_PREFIX              Parent directory for /bin/WRAPPER_NAME.
                             Default: /usr/local
   - DOCKER_CONTAINER_OPTS   Set optional docker parameters to append that will 
                             be appended to the create and run templates.
@@ -36,7 +38,7 @@ Variables:
                             artifacts are placed.
   - NO_CACHE                When true, no cache will be used while running the 
                             build target.
-  - PACKAGE_NAME            Container package name.
+  - WRAPPER_NAME            Name for the run wrapper.
 
 endef
 
@@ -110,11 +112,13 @@ get-docker-info := $(shell \
 	_require-docker-image-tag \
 	_require-docker-release-tag \
 	_require-package-path \
+	_require_run_wrapper \
 	_test-prerequisites \
 	_usage \
 	all \
 	build \
 	build-all \
+	build-wrapper \
 	clean \
 	dist \
 	distclean \
@@ -123,6 +127,7 @@ get-docker-info := $(shell \
 	images \
 	load \
 	pull \
+	rm-wrapper \
 	rmi \
 	test
 
@@ -185,6 +190,16 @@ _require-package-path:
 		exit 1; \
 	fi
 
+_require_run_wrapper:
+	$(eval $@_dist_path := $(realpath \
+		$(DIST_PATH) \
+	))
+	@ if [[ ! -f $($@_dist_path)/$(WRAPPER_NAME) ]]; then \
+		echo "$(PREFIX_STEP_NEGATIVE)This operation requires the $(WRAPPER_NAME) run wrapper."; \
+		echo "$(PREFIX_SUB_STEP)Try building it with make build-wrapper."; \
+		exit 1; \
+	fi
+
 _test-prerequisites:
 ifeq ($(shpec),)
 	$(error "Please install shpec.")
@@ -195,7 +210,7 @@ _usage:
 
 all: _prerequisites | build images install
 
-build: _prerequisites _require-docker-image-tag
+build: _prerequisites _require-docker-image-tag | build-wrapper
 	@ echo "$(PREFIX_STEP)Building $(DOCKER_USER)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)"
 	@ if [[ $(NO_CACHE) == true ]]; then \
 		echo "$(PREFIX_SUB_STEP)Skipping cache"; \
@@ -212,7 +227,29 @@ build: _prerequisites _require-docker-image-tag
 		exit 1; \
 	fi
 
-clean: _prerequisites | rmi
+build-wrapper: _prerequisites
+	$(eval $@_dist_path := $(realpath \
+		$(DIST_PATH) \
+	))
+	@ echo "$(PREFIX_STEP)Building run wrapper"
+	@ $(m4) \
+		-D WRAPPER_NAME="$(WRAPPER_NAME)" \
+		-D WRAPPER_PRE_RUN="$(WRAPPER_PRE_RUN)" \
+		-D WRAPPER_RUN="$(docker) run \
+	$(DOCKER_CONTAINER_PARAMETERS) \
+	$(DOCKER_CONTAINER_OPTS) \
+	$(DOCKER_USER)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG_TEMPLATE)" \
+		-D PHP_VERSION_DEFAULT="$(PHP_VERSION)" \
+		src/run-wrapper.sh.m4 \
+		> $($@_dist_path)/$(WRAPPER_NAME); \
+	if [[ $${?} -eq 0 ]]; then \
+		echo "$(PREFIX_SUB_STEP_POSITIVE)Build complete"; \
+	else \
+		echo "$(PREFIX_SUB_STEP_NEGATIVE)Build error"; \
+		exit 1; \
+	fi
+
+clean: _prerequisites | rm-wrapper rmi
 
 dist: _prerequisites _require-docker-release-tag _require-package-path | pull
 	$(eval $@_dist_path := $(realpath \
@@ -263,28 +300,23 @@ images: _prerequisites
 
 help: _usage
 
-install: | _prerequisites _require-bin-path _require-package-path
+install: | _prerequisites _require-bin-path _require-package-path _require_run_wrapper
 	$(eval $@_bin_path := $(realpath \
 		$(BIN_PREFIX)/bin \
 	))
 	$(eval $@_dist_path := $(realpath \
 		$(DIST_PATH) \
 	))
-	@ echo "$(PREFIX_STEP)Installing package"
-	@ $(m4) \
-		-D PACKAGE_NAME="$(PACKAGE_NAME)" \
-		-D PACKAGE_PRE_RUN="$(PACKAGE_PRE_RUN)" \
-		-D PACKAGE_RUN="$(docker) run \
-	$(DOCKER_CONTAINER_PARAMETERS) \
-	$(DOCKER_CONTAINER_OPTS) \
-	$(DOCKER_USER)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG_TEMPLATE)" \
-		-D PHP_VERSION_DEFAULT="$(PHP_VERSION)" \
-		src/docker-package.sh.m4 \
-		> $($@_dist_path)/$(PACKAGE_NAME) \
-	&& install \
-		$($@_dist_path)/$(PACKAGE_NAME) \
-		$($@_bin_path) \
-	&& echo "$(PREFIX_SUB_STEP_POSITIVE)Installed $($@_bin_path)/$(PACKAGE_NAME)"; \
+	@ echo "$(PREFIX_STEP)Installing run wrapper"
+	@ install \
+		$($@_dist_path)/$(WRAPPER_NAME) \
+		$($@_bin_path); \
+		if [[ $${?} -eq 0 ]]; then \
+			echo "$(PREFIX_SUB_STEP_POSITIVE)Installed $($@_bin_path)/$(WRAPPER_NAME)"; \
+		else \
+			echo "$(PREFIX_SUB_STEP_NEGATIVE)Install failed"; \
+			exit 1; \
+		fi
 
 load: _prerequisites _require-docker-release-tag _require-package-path
 	$(eval $@_dist_path := $(realpath \
@@ -313,6 +345,24 @@ pull: _prerequisites _require-docker-image-tag
 	else \
 		echo "$(PREFIX_SUB_STEP_NEGATIVE)Error pulling image"; \
 		exit 1; \
+	fi
+
+rm-wrapper: _prerequisites
+	$(eval $@_dist_path := $(realpath \
+		$(DIST_PATH) \
+	))
+	@ if [[ -f $($@_dist_path)/$(WRAPPER_NAME) ]]; then \
+		echo "$(PREFIX_STEP)Purging run wrapper"; \
+		rm -f \
+			$($@_dist_path)/$(WRAPPER_NAME); \
+		if [[ $${?} -eq 0 ]]; then \
+			echo "$(PREFIX_SUB_STEP_POSITIVE)Run wrapper Purged"; \
+		else \
+			echo "$(PREFIX_SUB_STEP_NEGATIVE)Error purging run wrapper"; \
+			exit 1; \
+		fi; \
+	else \
+		echo "$(PREFIX_STEP)Purging run wrapper skipped"; \
 	fi
 
 rmi: _prerequisites _require-docker-image-tag
