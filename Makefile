@@ -27,6 +27,7 @@ Targets:
   rm-wrapper                Purge run-wrapper.
   rmi                       Untag (remove) the image.
   test                      Run all test cases.
+  uninstall                 Uninstall the run wrapper.
 
 Variables:
   - BIN_PREFIX              Parent directory for /bin/WRAPPER_NAME.
@@ -129,7 +130,8 @@ get-docker-info := $(shell \
 	pull \
 	rm-wrapper \
 	rmi \
-	test
+	test \
+	uninstall
 
 _prerequisites:
 ifeq ($(docker),)
@@ -387,3 +389,21 @@ test: _test-prerequisites
 	fi;
 	@ echo "$(PREFIX_STEP)Functional test";
 	@ SHPEC_ROOT=$(SHPEC_ROOT) $(shpec);
+
+uninstall: _prerequisites _require-bin-path
+	$(eval $@_bin_path := $(realpath \
+		$(BIN_PREFIX)/bin \
+	))
+	@ if [[ -f $($@_bin_path)/$(WRAPPER_NAME) ]]; then \
+		echo "$(PREFIX_STEP)Uninstalling run wrapper"; \
+		rm -f \
+			$($@_bin_path)/$(WRAPPER_NAME); \
+		if [[ $${?} -eq 0 ]]; then \
+			echo "$(PREFIX_SUB_STEP_POSITIVE)Uninstalled $($@_bin_path)/$(WRAPPER_NAME)"; \
+		else \
+			echo "$(PREFIX_SUB_STEP_NEGATIVE)Uninstall failed"; \
+			exit 1; \
+		fi; \
+	else \
+		echo "$(PREFIX_STEP)Uninstalling run wrapper skipped"; \
+	fi
