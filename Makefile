@@ -11,10 +11,10 @@ container image defined by the Dockerfile.
 Targets:
   all                       Combines targets build images and install.
   build                     Builds the image. This is the default target.
-  build-all                 Builds all image varaints.
+  build-all                 Builds all image variants (tags).
   build-wrapper             Builds the run wrapper.
   clean                     Clean up build artifacts.
-  clean-all                 Clean up build artifcats for all image variants.
+  clean-all                 Clean up build artifacts for all image variants.
   dist                      Pull a release version from the registry and save a
                             package suitable for offline distribution. Image is 
                             saved as a tar archive, compressed with xz.
