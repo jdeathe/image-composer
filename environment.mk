@@ -1,6 +1,7 @@
 # -----------------------------------------------------------------------------
 # Constants
 # -----------------------------------------------------------------------------
+BUILD_VARIANTS := php71 php70 php56
 DOCKER_USER := jdeathe
 DOCKER_IMAGE_NAME := composer
 SHPEC_ROOT := test/shpec

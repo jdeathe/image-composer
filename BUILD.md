@@ -7,12 +7,7 @@ To build all images for support PHP versions the following bash snippets can be 
 Optionally, remove existing images before building.
 
 ```
-$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
-  do \
-    cd ${BUILD_DIR} && \
-    make clean; \
-    cd - &> /dev/null; \
-  done
+$ make clean-all
 ```
 
 ## Build
@@ -20,10 +15,5 @@ $ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | s
 Build all supported image variants.
 
 ```
-$ for BUILD_DIR in $(find . -type d -regex '\./php[57][0-9]$' | sed 's~./~~' | sort -r);
-  do \
-    cd ${BUILD_DIR} && \
-    make; \
-    cd - &> /dev/null; \
-  done
+$ make build-all
 ```

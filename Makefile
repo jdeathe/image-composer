@@ -11,8 +11,10 @@ container image defined by the Dockerfile.
 Targets:
   all                       Combines targets build images and install.
   build                     Builds the image. This is the default target.
+  build-all                 Builds all image varaints.
   build-wrapper             Builds the run wrapper.
   clean                     Clean up build artifacts.
+  clean-all                 Clean up build artifcats for all image variants.
   dist                      Pull a release version from the registry and save a
                             package suitable for offline distribution. Image is 
                             saved as a tar archive, compressed with xz.
@@ -121,6 +123,7 @@ get-docker-info := $(shell \
 	build-all \
 	build-wrapper \
 	clean \
+	clean-all \
 	dist \
 	distclean \
 	help \
@@ -229,6 +232,26 @@ build: _prerequisites _require-docker-image-tag | build-wrapper
 		exit 1; \
 	fi
 
+build-all: _prerequisites
+	$(eval $@_build_root := $(realpath \
+		./ \
+	))
+	@ echo "$(PREFIX_STEP)Building all variants"
+	@ trap "cd $($@_build_root) \
+			&> /dev/null; \
+			exit 1" \
+			INT TERM EXIT; \
+		for BUILD_VARIANT in $(BUILD_VARIANTS); \
+		do \
+			cd $($@_build_root)/$${BUILD_VARIANT} && \
+			make build; \
+			cd $($@_build_root) \
+				&> /dev/null; \
+		done; \
+		trap - \
+			INT TERM EXIT
+	@ echo "$(PREFIX_SUB_STEP)All builds complete"
+
 build-wrapper: _prerequisites
 	$(eval $@_dist_path := $(realpath \
 		$(DIST_PATH) \
@@ -252,6 +275,26 @@ build-wrapper: _prerequisites
 	fi
 
 clean: _prerequisites | rm-wrapper rmi
+
+clean-all: _prerequisites
+	$(eval $@_build_root := $(realpath \
+		./ \
+	))
+	@ echo "$(PREFIX_STEP)Cleaning all variants"
+	@ trap "cd $($@_build_root) \
+			&> /dev/null; \
+			exit 1" \
+			INT TERM EXIT; \
+		for BUILD_VARIANT in $(BUILD_VARIANTS); \
+		do \
+			cd $($@_build_root)/$${BUILD_VARIANT} && \
+			make clean; \
+			cd $($@_build_root) \
+				&> /dev/null; \
+		done; \
+		trap - \
+			INT TERM EXIT
+	@ echo "$(PREFIX_SUB_STEP)Cleanup complete"
 
 dist: _prerequisites _require-docker-release-tag _require-package-path | pull
 	$(eval $@_dist_path := $(realpath \
@@ -358,7 +401,7 @@ rm-wrapper: _prerequisites
 		rm -f \
 			$($@_dist_path)/$(WRAPPER_NAME); \
 		if [[ $${?} -eq 0 ]]; then \
-			echo "$(PREFIX_SUB_STEP_POSITIVE)Run wrapper Purged"; \
+			echo "$(PREFIX_SUB_STEP_POSITIVE)Run wrapper purged"; \
 		else \
 			echo "$(PREFIX_SUB_STEP_NEGATIVE)Error purging run wrapper"; \
 			exit 1; \
