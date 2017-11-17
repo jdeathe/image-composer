@@ -1,8 +1,10 @@
 # Building
 
-To build all images for support PHP versions the following bash snippets can be used to run the Make targets.
+To build all images for supported PHP versions the following Makefile targets are available.
 
-## Clean
+For further details about usage of the Makefile run `make help`.
+
+## Clean all
 
 Optionally, remove existing images before building.
 
@@ -10,7 +12,7 @@ Optionally, remove existing images before building.
 $ make clean-all
 ```
 
-## Build
+## Build all
 
 Build all supported image variants.
 
