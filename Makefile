@@ -280,6 +280,7 @@ build-wrapper: _prerequisites-wrapper
 		src/run-wrapper.sh.m4 \
 		> $($@_dist_path)/$(WRAPPER_NAME); \
 	if [[ $${?} -eq 0 ]]; then \
+		chmod +x $($@_dist_path)/$(WRAPPER_NAME); \
 		echo "$(PREFIX_SUB_STEP_POSITIVE)Build complete"; \
 	else \
 		echo "$(PREFIX_SUB_STEP_NEGATIVE)Build error"; \
