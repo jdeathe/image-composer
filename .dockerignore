@@ -5,5 +5,5 @@ LICENSE
 README-short.txt
 *.md
 !README.md
-**/*.mk
-**/Makefile
+*/*.mk
+*/Makefile
