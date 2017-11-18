@@ -123,7 +123,7 @@ get-docker-info := $(shell \
 	_require-docker-image-tag \
 	_require-docker-release-tag \
 	_require-package-path \
-	_require_run_wrapper \
+	_require-run-wrapper \
 	_usage \
 	all \
 	build \
@@ -212,7 +212,7 @@ _require-package-path:
 		exit 1; \
 	fi
 
-_require_run_wrapper:
+_require-run-wrapper:
 	$(eval $@_dist_path := $(realpath \
 		$(DIST_PATH) \
 	))
@@ -358,7 +358,7 @@ images: _prerequisites
 
 help: _usage
 
-install: | _prerequisites-wrapper _require-bin-path _require-package-path _require_run_wrapper
+install: | _prerequisites-wrapper _require-bin-path _require-package-path _require-run-wrapper
 	$(eval $@_bin_path := $(realpath \
 		$(BIN_PREFIX)/bin \
 	))
