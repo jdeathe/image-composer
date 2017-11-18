@@ -92,11 +92,16 @@ PREFIX_SUB_STEP_POSITIVE := $(shell \
 docker := $(shell \
 	command -v docker \
 )
-m4 := $(shell \
-	command -v m4 \
-)
 xz := $(shell \
 	command -v xz \
+)
+
+# Run wrapper prerequisites
+install := $(shell \
+	command -v install \
+)
+m4 := $(shell \
+	command -v m4 \
 )
 
 # Testing prerequisites
@@ -107,16 +112,18 @@ shpec := $(shell \
 # Used to test docker host is accessible
 get-docker-info := $(shell \
 	$(docker) info \
+		2> /dev/null \
 )
 
 .PHONY: \
 	_prerequisites \
+	_test-prerequisites \
+	_prerequisites-wrapper \
 	_require-bin-path \
 	_require-docker-image-tag \
 	_require-docker-release-tag \
 	_require-package-path \
 	_require_run_wrapper \
-	_test-prerequisites \
 	_usage \
 	all \
 	build \
@@ -141,16 +148,21 @@ ifeq ($(docker),)
 	$(error "Please install the docker (docker-engine) package.")
 endif
 
-ifeq ($(m4),)
-	$(error "Please install the m4 package.")
-endif
-
 ifeq ($(xz),)
 	$(error "Please install the xz package.")
 endif
 
 ifeq ($(get-docker-info),)
 	$(error "Unable to connect to docker host.")
+endif
+
+_prerequisites-wrapper:
+ifeq ($(install),)
+	$(error "Please install the install package.")
+endif
+
+ifeq ($(m4),)
+	$(error "Please install the m4 package.")
 endif
 
 _require-bin-path:
@@ -244,7 +256,7 @@ build-all: _prerequisites
 		for BUILD_VARIANT in $(BUILD_VARIANTS); \
 		do \
 			cd $($@_build_root)/$${BUILD_VARIANT} && \
-			make build; \
+			$(MAKE) build; \
 			cd $($@_build_root) \
 				&> /dev/null; \
 		done; \
@@ -252,7 +264,7 @@ build-all: _prerequisites
 			INT TERM EXIT
 	@ echo "$(PREFIX_SUB_STEP)All builds complete"
 
-build-wrapper: _prerequisites
+build-wrapper: _prerequisites-wrapper
 	$(eval $@_dist_path := $(realpath \
 		$(DIST_PATH) \
 	))
@@ -288,7 +300,7 @@ clean-all: _prerequisites
 		for BUILD_VARIANT in $(BUILD_VARIANTS); \
 		do \
 			cd $($@_build_root)/$${BUILD_VARIANT} && \
-			make clean; \
+			$(MAKE) clean; \
 			cd $($@_build_root) \
 				&> /dev/null; \
 		done; \
@@ -345,7 +357,7 @@ images: _prerequisites
 
 help: _usage
 
-install: | _prerequisites _require-bin-path _require-package-path _require_run_wrapper
+install: | _prerequisites-wrapper _require-bin-path _require-package-path _require_run_wrapper
 	$(eval $@_bin_path := $(realpath \
 		$(BIN_PREFIX)/bin \
 	))
@@ -353,7 +365,7 @@ install: | _prerequisites _require-bin-path _require-package-path _require_run_w
 		$(DIST_PATH) \
 	))
 	@ echo "$(PREFIX_STEP)Installing run wrapper"
-	@ install \
+	@ $(install) \
 		$($@_dist_path)/$(WRAPPER_NAME) \
 		$($@_bin_path); \
 		if [[ $${?} -eq 0 ]]; then \
@@ -433,7 +445,7 @@ test: _test-prerequisites
 	@ echo "$(PREFIX_STEP)Functional test";
 	@ SHPEC_ROOT=$(SHPEC_ROOT) $(shpec);
 
-uninstall: _prerequisites _require-bin-path
+uninstall: _require-bin-path
 	$(eval $@_bin_path := $(realpath \
 		$(BIN_PREFIX)/bin \
 	))
