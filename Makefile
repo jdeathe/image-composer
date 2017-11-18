@@ -117,7 +117,7 @@ get-docker-info := $(shell \
 
 .PHONY: \
 	_prerequisites \
-	_test-prerequisites \
+	_prerequisites-test \
 	_prerequisites-wrapper \
 	_require-bin-path \
 	_require-docker-image-tag \
@@ -154,6 +154,11 @@ endif
 
 ifeq ($(get-docker-info),)
 	$(error "Unable to connect to docker host.")
+endif
+
+_prerequisites-test:
+ifeq ($(shpec),)
+	$(error "Please install shpec.")
 endif
 
 _prerequisites-wrapper:
@@ -216,11 +221,6 @@ _require_run_wrapper:
 		echo "$(PREFIX_SUB_STEP)Try building it with make build-wrapper."; \
 		exit 1; \
 	fi
-
-_test-prerequisites:
-ifeq ($(shpec),)
-	$(error "Please install shpec.")
-endif
 
 _usage:
 	@: $(info $(USAGE))
@@ -439,7 +439,7 @@ rmi: _prerequisites _require-docker-image-tag
 		echo "$(PREFIX_STEP)Untagging image skipped"; \
 	fi
 
-test: _test-prerequisites
+test: _prerequisites-test
 	@ if [[ -z $$(if [[ -n $$($(docker) images -q $(DOCKER_USER)/$(DOCKER_IMAGE_NAME):latest) ]]; then echo $$($(docker) images -q $(DOCKER_USER)/$(DOCKER_IMAGE_NAME):latest); else echo $$($(docker) images -q docker.io/$(DOCKER_USER)/$(DOCKER_IMAGE_NAME):latest); fi;) ]]; then \
 		$(MAKE) build; \
 	fi;
