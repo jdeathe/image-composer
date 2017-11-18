@@ -13,6 +13,15 @@ ARG COMPOSER_CACHE_DIR="${COMPOSER_INSTALL_PATH}/var/cache"
 ARG COMPOSER_HOME="${COMPOSER_INSTALL_PATH}/etc"
 ARG COMPOSER_RELEASE_URI="https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/${COMPOSER_FILENAME}"
 ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
+ARG RUN_WRAPPER_INSTALL_PATH="/opt/deathe.org-run-wrapper"
+
+COPY src/run-wrapper.sh.m4 \
+	/tmp/src/
+
+COPY default.mk \
+	environment.mk \
+	Makefile \
+	/tmp/
 
 RUN \
 	apk add \
@@ -53,11 +62,6 @@ RUN \
 		mcrypt \
 		opcache \
 		zip \
-	&& apk del \
-		.build-deps \
-	&& rm -rf \
-		/tmp/* \
-		/var/cache/apk/* \
 	&& mkdir -p \
 		"${COMPOSER_WORKSPACE}" \
 	&& mkdir -p \
@@ -87,7 +91,17 @@ RUN \
 		'%s\n%s\n%s\n' \
 		"opcache.enable_cli=1" \
 		"opcache.max_accelerated_files=32531" \
-		> ${PHP_INI_DIR}/conf.d/opcache.ini
+		> ${PHP_INI_DIR}/conf.d/opcache.ini \
+	&& mkdir -p \
+		"${RUN_WRAPPER_INSTALL_PATH}" \
+	&& cd /tmp \
+	&& DIST_PATH="${RUN_WRAPPER_INSTALL_PATH}" \
+		make build-wrapper \
+	&& apk del \
+		.build-deps \
+	&& rm -rf \
+		/tmp/* \
+		/var/cache/apk/*
 
 ENV \
 	COMPOSER_ALLOW_SUPERUSER="1" \
