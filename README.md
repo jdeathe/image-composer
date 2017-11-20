@@ -51,6 +51,16 @@ $ eval "$(docker inspect \
 $ composer -vvv -V
 ```
 
+### Running PHP version
+
+Using the `PHP_VERSION` environment variable it's possible to be selective about the PHP version used with composer.
+
+To run composer with PHP 7.1 the `PHP_VERSION` environment variable should be set to either `71`, `7.1` or `7.1.11`.
+
+```
+$ PHP_VERSION=7.1 composer -vvv --version
+```
+
 ## Uninstalling run wrapper
 
 ```
