@@ -22,6 +22,7 @@ Targets:
   help                      Show this help.
   install                   Install the run wrapper.
   images                    Show container's image details.
+  images-all                Show image details for all image variants.
   load                      Loads from the distribution package. Requires 
                             DOCKER_IMAGE_TAG variable.
   pull                      Pull the release image from the registry. Requires 
@@ -136,6 +137,7 @@ get-docker-info := $(shell \
 	help \
 	install \
 	images \
+	images-all \
 	load \
 	pull \
 	rm-wrapper \
@@ -359,6 +361,24 @@ distclean: _prerequisites _require-docker-release-tag _require-package-path | cl
 images: _prerequisites
 	@ $(docker) images \
 		$(DOCKER_USER)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG);
+
+images-all: _prerequisites
+	$(eval $@_build_root := $(realpath \
+		./ \
+	))
+	@ trap "cd $($@_build_root) \
+			&> /dev/null; \
+			exit 1" \
+			INT TERM EXIT; \
+		for BUILD_VARIANT in $(BUILD_VARIANTS); \
+		do \
+			cd $($@_build_root)/$${BUILD_VARIANT} && \
+				$(MAKE) images; \
+			cd $($@_build_root) \
+				&> /dev/null; \
+		done; \
+		trap - \
+			INT TERM EXIT
 
 help: _usage
 
