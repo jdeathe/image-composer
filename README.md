@@ -2,8 +2,6 @@
 
 Docker image of the [Composer](https://github.com/composer/composer) dependency manager for PHP.
 
-*WARNING:* This is currently WIP - NOT ready for general use.
-
 ## Supported tags and respective `Dockerfile` links
 
 - `1.5.2-php56`, `latest` [(php56/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php56/Dockerfile)
