@@ -8,6 +8,8 @@ ARG COMPOSER_VERSION="1.5.2"
 ARG COMPOSER_WORKSPACE="/workspace"
 ARG PHP_PACKAGE_PREFIX="php71"
 ARG PHP_VERSION
+ARG RUN_WRAPPER_DIST_PATH="/opt/deathe.org-run-wrapper"
+ARG RUN_WRAPPER_NAME="composer"
 
 ARG COMPOSER_CACHE_DIR="${COMPOSER_INSTALL_PATH}/var/cache"
 ARG COMPOSER_HOME="${COMPOSER_INSTALL_PATH}/etc"
@@ -96,6 +98,7 @@ RUN \
 		"${RUN_WRAPPER_DIST_PATH}" \
 	&& cd /tmp \
 	&& DIST_PATH="${RUN_WRAPPER_DIST_PATH}" \
+		WRAPPER_NAME="${RUN_WRAPPER_NAME}" \
 		make build-wrapper \
 	&& apk del \
 		.build-deps \
@@ -133,6 +136,16 @@ docker run \
 --volume composer-etc:/opt/getcomposer.org/etc \
 --volume composer-${PHP_PACKAGE_PREFIX}-cache:/opt/getcomposer.org/var/cache \
 jdeathe/composer:${RELEASE_VERSION}" \
+	install="\
+docker run \
+--rm \
+--entrypoint /bin/cat \
+jdeathe/composer:${RELEASE_VERSION} \
+${RUN_WRAPPER_DIST_PATH}/${RUN_WRAPPER_NAME} \
+> /usr/local/bin/${RUN_WRAPPER_NAME} \
+&& chmod 766 /usr/local/bin/${RUN_WRAPPER_NAME}" \
+	uninstall="\
+rm -f /usr/local/bin/${RUN_WRAPPER_NAME}" \
 	org.deathe.name="composer" \
 	org.deathe.version="${RELEASE_VERSION}" \
 	org.deathe.release="jdeathe/composer:${RELEASE_VERSION}" \
