@@ -1,6 +1,6 @@
 # Composer Image
 
-Docker image of the [Composer](https://github.com/jadu/meteor) dependency manager for PHP.
+Docker image of the [Composer](https://github.com/composer/composer) dependency manager for PHP.
 
 *WARNING:* This is currently WIP - NOT ready for general use.
 
