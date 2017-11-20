@@ -9,7 +9,7 @@ This Makefile allows you to build, install and create release packages for the
 container image defined by the Dockerfile.
 
 Targets:
-  all                       Combines targets build images and install.
+  all                       Combines targets build-all images-all and test.
   build                     Builds the image. This is the default target.
   build-all                 Builds all image variants (tags).
   build-wrapper             Builds the run wrapper.
@@ -231,7 +231,7 @@ _require-run-wrapper:
 _usage:
 	@: $(info $(USAGE))
 
-all: _prerequisites | build images install
+all: _prerequisites _prerequisites-test | build-all images-all test
 
 build: _prerequisites _require-docker-image-tag | build-wrapper
 	@ echo "$(PREFIX_STEP)Building $(DOCKER_USER)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)"
