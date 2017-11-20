@@ -162,6 +162,10 @@ ifeq ($(shpec),)
 endif
 
 _prerequisites-wrapper:
+ifeq ($(docker),)
+docker := docker
+endif
+
 ifeq ($(install),)
 	$(error "Please install the install package.")
 endif
