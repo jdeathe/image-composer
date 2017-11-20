@@ -1,4 +1,4 @@
-ARG PHP_VERSION="5.6.32"
+ARG PHP_VERSION="7.1.11"
 
 FROM php:${PHP_VERSION}-cli-alpine
 
@@ -6,11 +6,24 @@ ARG COMPOSER_FILENAME="composer.phar"
 ARG COMPOSER_INSTALL_PATH="/opt/getcomposer.org"
 ARG COMPOSER_VERSION="1.5.2"
 ARG COMPOSER_WORKSPACE="/workspace"
-ARG PHP_PACKAGE_PREFIX="php56"
+ARG PHP_PACKAGE_PREFIX="php71"
+ARG PHP_VERSION
+ARG RUN_WRAPPER_DIST_PATH="/opt/deathe.org-run-wrapper"
+ARG RUN_WRAPPER_NAME="composer"
 
 ARG COMPOSER_CACHE_DIR="${COMPOSER_INSTALL_PATH}/var/cache"
 ARG COMPOSER_HOME="${COMPOSER_INSTALL_PATH}/etc"
 ARG COMPOSER_RELEASE_URI="https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/${COMPOSER_FILENAME}"
+ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
+ARG RUN_WRAPPER_DIST_PATH="/opt/deathe.org-run-wrapper"
+
+COPY src/run-wrapper.sh.m4 \
+	/tmp/src/
+
+COPY default.mk \
+	environment.mk \
+	Makefile \
+	/tmp/
 
 RUN \
 	apk add \
@@ -28,6 +41,7 @@ RUN \
 		--virtual .build-deps \
 		autoconf \
 		automake \
+		bash \
 		curl-dev \
 		gcc \
 		g++ \
@@ -37,8 +51,12 @@ RUN \
 		pkgconfig \
 		re2c \
 		zlib-dev \
-	&& pecl install \
-		apcu-4.0.10 \
+	&& if [[ ${PHP_VERSION%%.*} == 5 ]]; \
+		then \
+			pecl install apcu-4.0.11; \
+		else \
+			pecl install apcu-5.1.8; \
+		fi \
 	&& docker-php-ext-enable \
 		apcu \
 	&& docker-php-ext-install \
@@ -46,11 +64,6 @@ RUN \
 		mcrypt \
 		opcache \
 		zip \
-	&& apk del \
-		.build-deps \
-	&& rm -rf \
-		/tmp/* \
-		/var/cache/apk/* \
 	&& mkdir -p \
 		"${COMPOSER_WORKSPACE}" \
 	&& mkdir -p \
@@ -70,12 +83,28 @@ RUN \
 		"${COMPOSER_INSTALL_PATH}"/bin/composer \
 		/usr/local/bin/composer \
 	&& printf -- \
-		'memory_limit=-1\n' \
-		> "${PHP_INI_DIR}/conf.d/memory-limit.ini" \
-	&& printf -- \
 		'date.timezone=%s\n' \
 		"${PHP_TIMEZONE:-UTC}" \
-		> "${PHP_INI_DIR}/conf.d/date_timezone.ini"
+		> "${PHP_INI_DIR}/conf.d/date.ini" \
+	&& printf -- \
+		'memory_limit=-1\n' \
+		> "${PHP_INI_DIR}/conf.d/resource-limits.ini" \
+	&& printf -- \
+		'%s\n%s\n%s\n' \
+		"opcache.enable_cli=1" \
+		"opcache.max_accelerated_files=32531" \
+		> ${PHP_INI_DIR}/conf.d/opcache.ini \
+	&& mkdir -p \
+		"${RUN_WRAPPER_DIST_PATH}" \
+	&& cd /tmp \
+	&& DIST_PATH="${RUN_WRAPPER_DIST_PATH}" \
+		WRAPPER_NAME="${RUN_WRAPPER_NAME}" \
+		make build-wrapper \
+	&& apk del \
+		.build-deps \
+	&& rm -rf \
+		/tmp/* \
+		/var/cache/apk/*
 
 ENV \
 	COMPOSER_ALLOW_SUPERUSER="1" \
@@ -96,7 +125,6 @@ ENV \
 	http_proxy="" \
 	no_proxy=""
 
-ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
 LABEL \
 	maintainer="James Deathe <james.deathe@gmail.com>" \
 	run="\
@@ -108,6 +136,16 @@ docker run \
 --volume composer-etc:/opt/getcomposer.org/etc \
 --volume composer-${PHP_PACKAGE_PREFIX}-cache:/opt/getcomposer.org/var/cache \
 jdeathe/composer:${RELEASE_VERSION}" \
+	install="\
+docker run \
+--rm \
+--entrypoint /bin/cat \
+jdeathe/composer:${RELEASE_VERSION} \
+${RUN_WRAPPER_DIST_PATH}/${RUN_WRAPPER_NAME} \
+> /usr/local/bin/${RUN_WRAPPER_NAME} \
+&& chmod 766 /usr/local/bin/${RUN_WRAPPER_NAME}" \
+	uninstall="\
+rm -f /usr/local/bin/${RUN_WRAPPER_NAME}" \
 	org.deathe.name="composer" \
 	org.deathe.version="${RELEASE_VERSION}" \
 	org.deathe.release="jdeathe/composer:${RELEASE_VERSION}" \

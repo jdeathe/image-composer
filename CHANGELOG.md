@@ -4,6 +4,8 @@
 
 Summary of release changes for Version 1
 
-### 1.0.0 - Unreleased
+### 1.0.0 - 2017-11-20
 
 - Initial release
+- Composer [1.5.2](https://github.com/composer/composer/releases/tag/1.5.2).
+- PHP versions: 5.6.32, 7.0.25 and 7.1.11.

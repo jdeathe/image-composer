@@ -1,53 +1,29 @@
 # Composer Image
 
-Docker image of the [Composer](https://github.com/jadu/meteor) dependency manager for PHP.
+Docker image of the [Composer](https://github.com/composer/composer) dependency manager for PHP.
 
-*WARNING:* This is currently WIP - NOT ready for general use.
+## Supported tags and respective `Dockerfile` links
 
-## Building
+- `1.5.2-php56`, `latest` [(php56/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php56/Dockerfile)
+- `1.5.2-php70` [(php70/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php70/Dockerfile)
+- `1.5.2-php71` [(php71/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php71/Dockerfile)
 
-### Remove local image tags
+## Run template
 
-```
-$ for VERSION in 7.1.11 7.0.25 5.6.32; \
-  do \
-    COMPOSER_VERSION=1.5.2 \
-    PHP_VERSION=${VERSION} \
-    PHP_PACKAGE_PREFIX=php${${PHP_VERSION%.*}//./} \
-    DOCKER_IMAGE_TAG=${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX} \
-    make clean; \
-  done
-```
+Run template for use on [Project Atomic's](http://www.projectatomic.io/) based environments where the [`atomic run`](https://github.com/projectatomic/atomic#atomic-run) command is available.
 
-### Build image tags
+### Pull the image.
+
+To inspect an image it is necessary to pull it.
 
 ```
-$ for VERSION in 7.1.11 7.0.25 5.6.32; \
-  do \
-    COMPOSER_VERSION=1.5.2 \
-    PHP_VERSION=${VERSION} \
-    PHP_PACKAGE_PREFIX=php${${PHP_VERSION%.*}//./} \
-    DOCKER_IMAGE_TAG=${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX} \
-    make; \
-  done
+$ docker pull \
+  jdeathe/composer:1.5.2-php56
 ```
 
-### Build local binary
+### Inspect the run label.
 
-```
-$ for VERSION in 7.1.11 7.0.25 5.6.32; \
-  do \
-    COMPOSER_VERSION=1.5.2 \
-    PHP_VERSION=${VERSION} \
-    PHP_PACKAGE_PREFIX=php${${PHP_VERSION%.*}//./} \
-    DOCKER_IMAGE_TAG=${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX} \
-    make install; \
-  done
-```
-
-## Extract run template
-
-Run template for use on [Project Atomic's](http://www.projectatomic.io/) based environments.
+The run label provides the `docker run` usage template.
 
 ```
 $ docker inspect \
@@ -56,11 +32,38 @@ $ docker inspect \
   jdeathe/composer:1.5.2-php56
 ```
 
-## Extract image description
+## Installing run wrapper
+
+Installing the run wrapper script allows you to use `composer` as though it were a locally installed package.
 
 ```
-$ docker inspect \
-  --format '{{ index .ContainerConfig.Labels "org.deathe.description" }}' \
-  --type=image \
+$ eval "$(docker inspect \
+  --format "{{.ContainerConfig.Labels.install}}" \
   jdeathe/composer:1.5.2-php56
+)"
+```
+
+### Verify the installation
+
+```
+$ composer -vvv -V
+```
+
+### Running PHP version
+
+Using the `PHP_VERSION` environment variable it's possible to be selective about the PHP version used with composer.
+
+To run composer with PHP 7.1 the `PHP_VERSION` environment variable should be set to either `71`, `7.1` or `7.1.11`.
+
+```
+$ PHP_VERSION=7.1 composer -vvv --version
+```
+
+## Uninstalling run wrapper
+
+```
+$ eval "$(docker inspect \
+  --format "{{.ContainerConfig.Labels.uninstall}}" \
+  jdeathe/composer:1.5.2-php56
+)"
 ```

@@ -1,13 +1,14 @@
 # -----------------------------------------------------------------------------
 # Constants
 # -----------------------------------------------------------------------------
+BUILD_VARIANTS := php71 php70 php56
 DOCKER_USER := jdeathe
 DOCKER_IMAGE_NAME := composer
 SHPEC_ROOT := test/shpec
 
 # Tag validation patterns
-DOCKER_IMAGE_TAG_PATTERN := ^(latest|[0-9]+\.[0-9]+\.[0-9]+-php[0-9]{2}(-alpine))?$
-DOCKER_IMAGE_RELEASE_TAG_PATTERN := ^[0-9]+\.[0-9]+\.[0-9]+-php[0-9]{2}(-alpine)?$
+DOCKER_IMAGE_TAG_PATTERN := ^(latest|[0-9]+\.[0-9]+\.[0-9]+-php[0-9]{2})?$
+DOCKER_IMAGE_RELEASE_TAG_PATTERN := ^[0-9]+\.[0-9]+\.[0-9]+-php[0-9]{2}?$
 
 # -----------------------------------------------------------------------------
 # Variables
@@ -19,8 +20,8 @@ DOCKER_IMAGE_TAG ?= latest
 DOCKER_RESTART_POLICY ?= no
 
 # Package install settings
-PACKAGE_NAME ?= composer
 BIN_PREFIX ?= /usr/local
+WRAPPER_NAME ?= composer
 
 # Docker build --no-cache parameter
 NO_CACHE ?= false
