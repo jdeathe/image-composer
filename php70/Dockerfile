@@ -91,7 +91,7 @@ RUN \
 		> ${PHP_INI_DIR}/conf.d/opcache.ini \
 	&& mkdir -p \
 		"${RUN_WRAPPER_DIST_PATH}" \
-	&& cd /tmp \
+	&& cd /tmp/src \
 	&& DIST_PATH="${RUN_WRAPPER_DIST_PATH}" \
 		WRAPPER_NAME="${RUN_WRAPPER_NAME}" \
 		make build-wrapper \
