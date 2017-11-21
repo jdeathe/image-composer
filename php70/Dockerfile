@@ -17,13 +17,8 @@ ARG COMPOSER_RELEASE_URI="https://github.com/composer/composer/releases/download
 ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
 ARG RUN_WRAPPER_DIST_PATH="/opt/deathe.org-run-wrapper"
 
-COPY src/run-wrapper.sh.m4 \
+COPY src \
 	/tmp/src/
-
-COPY mk/default.mk \
-	mk/environment.mk \
-	mk/Makefile \
-	/tmp/
 
 RUN \
 	apk add \
