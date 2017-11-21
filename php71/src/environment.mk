@@ -7,8 +7,8 @@ DOCKER_IMAGE_NAME := composer
 SHPEC_ROOT := test/shpec
 
 # Tag validation patterns
-DOCKER_IMAGE_TAG_PATTERN := ^(latest|[0-9]+\.[0-9]+\.[0-9]+-php[0-9]{2})?$
-DOCKER_IMAGE_RELEASE_TAG_PATTERN := ^[0-9]+\.[0-9]+\.[0-9]+-php[0-9]{2}?$
+DOCKER_IMAGE_TAG_PATTERN := ^(latest|[0-9]+\.[0-9]+\.[0-9]+-php[57][0-9])?$
+DOCKER_IMAGE_RELEASE_TAG_PATTERN := ^[0-9]+\.[0-9]+\.[0-9]+-php[57][0-9]?$
 
 # -----------------------------------------------------------------------------
 # Variables
