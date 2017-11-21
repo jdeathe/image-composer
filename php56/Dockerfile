@@ -19,9 +19,9 @@ ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
 COPY src/run-wrapper.sh.m4 \
 	/tmp/src/
 
-COPY default.mk \
-	environment.mk \
-	Makefile \
+COPY mk/default.mk \
+	mk/environment.mk \
+	mk/Makefile \
 	/tmp/
 
 RUN \

@@ -20,9 +20,9 @@ ARG RUN_WRAPPER_DIST_PATH="/opt/deathe.org-run-wrapper"
 COPY src/run-wrapper.sh.m4 \
 	/tmp/src/
 
-COPY default.mk \
-	environment.mk \
-	Makefile \
+COPY mk/default.mk \
+	mk/environment.mk \
+	mk/Makefile \
 	/tmp/
 
 RUN \
