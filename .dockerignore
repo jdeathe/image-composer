@@ -7,3 +7,5 @@ README-short.txt
 !README.md
 */*.mk
 */Makefile
+!src/*.mk
+!src/Makefile
