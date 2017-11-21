@@ -19,8 +19,6 @@ ARG RELEASE_VERSION="${COMPOSER_VERSION}-${PHP_PACKAGE_PREFIX}"
 COPY src \
 	/tmp/src/
 
-RUN ls -la /tmp/src
-
 RUN \
 	apk add \
 		--update \
