@@ -4,7 +4,7 @@
 
 Summary of release changes for Version 1
 
-### 1.0.0 - 2017-11-20
+### 1.0.0 - 2017-11-21
 
 - Initial release
 - Composer [1.5.2](https://github.com/composer/composer/releases/tag/1.5.2).
