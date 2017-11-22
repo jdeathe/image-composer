@@ -4,6 +4,10 @@
 
 Summary of release changes for Version 1
 
+### 1.0.1 - Unreleased
+
+- Adds correct repository URL to docker image's label metadata.
+
 ### 1.0.0 - 2017-11-21
 
 - Initial release

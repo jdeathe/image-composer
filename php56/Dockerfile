@@ -145,7 +145,7 @@ rm -f /usr/local/bin/${RUN_WRAPPER_NAME}" \
 	org.deathe.release="jdeathe/composer:${RELEASE_VERSION}" \
 	org.deathe.license="MIT" \
 	org.deathe.vendor="jdeathe" \
-	org.deathe.url="https://github.com/jdeathe/composer" \
+	org.deathe.url="https://github.com/jdeathe/image-composer" \
 	org.deathe.description="Alpine - PHP CLI ${PHP_VERSION} / Composer ${COMPOSER_VERSION}."
 
 WORKDIR \
