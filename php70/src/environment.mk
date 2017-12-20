@@ -42,7 +42,7 @@ COMPOSER_INSTALL_PATH ?= /opt/getcomposer.org
 COMPOSER_VERSION ?= 1.5.6
 COMPOSER_WORKSPACE ?= /workspace
 PHP_PACKAGE_PREFIX ?= php70
-PHP_VERSION ?= 7.0.25
+PHP_VERSION ?= 7.0.26
 
 # ------------------------------------------------------------------------------
 # Application container configuration
