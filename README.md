@@ -7,6 +7,7 @@ Docker image of the [Composer](https://github.com/composer/composer) dependency 
 - `1.5.6-php56`, `latest` [(php56/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php56/Dockerfile)
 - `1.5.6-php70` [(php70/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php70/Dockerfile)
 - `1.5.6-php71` [(php71/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php71/Dockerfile)
+- `1.5.6-php72` [(php72/Dockerfile)](https://github.com/jdeathe/image-composer/blob/master/php72/Dockerfile)
 
 ## Run template
 
