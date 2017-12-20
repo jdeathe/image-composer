@@ -59,7 +59,7 @@ if [[ \$${PHP_VERSION} =~ ^[57]\.[0-9]\.[0-9]+$$ ]]; then \
   PHP_PACKAGE_PREFIX+=\"\$${PHP_VERSION_SHORT//./}\"; \
 elif [[ \$${PHP_VERSION} =~ ^[57]\.[0-9]$$ ]]; then \
   PHP_PACKAGE_PREFIX+=\"\$${PHP_VERSION//./}\"; \
-elif [[ \$${PHP_VERSION} =~ ^(56|70|71)$$ ]]; then \
+elif [[ \$${PHP_VERSION} =~ ^(56|70|71|72)$$ ]]; then \
   PHP_PACKAGE_PREFIX+=\"\$${PHP_VERSION}\"; \
 else \
   PHP_PACKAGE_PREFIX+=\"56\"; \

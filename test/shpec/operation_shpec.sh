@@ -33,7 +33,7 @@ function __shpec_matcher_egrep ()
 function verify_build ()
 {
 	local -r composer_version="1.5.6"
-	local -ra build_variants=(php56 php70 php71)
+	local -ra build_variants=(php56 php70 php71 php72)
 
 	local image_tag="latest"
 	local version
@@ -159,6 +159,42 @@ function verify_build ()
 		)"
 
 		image_tag="${composer_version}-${build_variants[2]}"
+
+		describe "Image tag: ${image_tag}"
+			it "Is running ${composer_version}"
+				docker run \
+					--rm \
+					jdeathe/composer:${image_tag} \
+					-vvv --version \
+					2>&1 \
+				| grep -qE "Running ${composer_version}"
+
+				assert equal \
+					"${?}" \
+					"0"
+			end
+
+			it "Is running with PHP ${version}"
+				docker run \
+					--rm \
+					jdeathe/composer:${image_tag} \
+					-vvv --version \
+					2>&1 \
+				| grep -qE "PHP ${version/./\\.}\.[0-9]+"
+
+				assert equal \
+					"${?}" \
+					"0"
+			end
+		end
+
+		version="$(
+			sed \
+				-e 's~[0-9]~&\.~' \
+				<<< "${build_variants[3]#php}"
+		)"
+
+		image_tag="${composer_version}-${build_variants[3]}"
 
 		describe "Image tag: ${image_tag}"
 			it "Is running ${composer_version}"
