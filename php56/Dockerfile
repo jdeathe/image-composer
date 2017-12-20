@@ -53,9 +53,13 @@ RUN \
 		fi \
 	&& docker-php-ext-enable \
 		apcu \
+	&& if [[ ${PHP_VERSION%.*} != 7.2 ]]; \
+		then \
+			docker-php-ext-install \
+				mcrypt; \
+		fi \
 	&& docker-php-ext-install \
 		bcmath \
-		mcrypt \
 		opcache \
 		zip \
 	&& mkdir -p \

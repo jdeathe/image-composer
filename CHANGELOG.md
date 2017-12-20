@@ -8,7 +8,7 @@ Summary of release changes for Version 1
 
 - Adds correct repository URL to docker image's label metadata.
 - Composer [1.5.6](https://github.com/composer/composer/releases/tag/1.5.6).
-- PHP versions: 5.6.32, 7.0.26 and 7.1.12.
+- PHP versions: 5.6.32, 7.0.26, 7.1.12, 7.2.0.
 
 ### 1.0.0 - 2017-11-21
 
