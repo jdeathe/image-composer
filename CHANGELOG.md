@@ -4,7 +4,7 @@
 
 Summary of release changes for Version 1
 
-### 1.0.1 - Unreleased
+### 1.0.1 - 2017-12-21
 
 - Adds correct repository URL to docker image's label metadata.
 - Composer [1.5.6](https://github.com/composer/composer/releases/tag/1.5.6).
