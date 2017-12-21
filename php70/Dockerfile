@@ -1,10 +1,10 @@
-ARG PHP_VERSION="7.0.25"
+ARG PHP_VERSION="7.0.26"
 
 FROM php:${PHP_VERSION}-cli-alpine
 
 ARG COMPOSER_FILENAME="composer.phar"
 ARG COMPOSER_INSTALL_PATH="/opt/getcomposer.org"
-ARG COMPOSER_VERSION="1.5.2"
+ARG COMPOSER_VERSION="1.5.6"
 ARG COMPOSER_WORKSPACE="/workspace"
 ARG PHP_PACKAGE_PREFIX="php70"
 ARG PHP_VERSION
@@ -54,9 +54,13 @@ RUN \
 		fi \
 	&& docker-php-ext-enable \
 		apcu \
+	&& if [[ ${PHP_VERSION%.*} != 7.2 ]]; \
+		then \
+			docker-php-ext-install \
+				mcrypt; \
+		fi \
 	&& docker-php-ext-install \
 		bcmath \
-		mcrypt \
 		opcache \
 		zip \
 	&& mkdir -p \
@@ -146,7 +150,7 @@ rm -f /usr/local/bin/${RUN_WRAPPER_NAME}" \
 	org.deathe.release="jdeathe/composer:${RELEASE_VERSION}" \
 	org.deathe.license="MIT" \
 	org.deathe.vendor="jdeathe" \
-	org.deathe.url="https://github.com/jdeathe/composer" \
+	org.deathe.url="https://github.com/jdeathe/image-composer" \
 	org.deathe.description="Alpine - PHP CLI ${PHP_VERSION} / Composer ${COMPOSER_VERSION}."
 
 WORKDIR \

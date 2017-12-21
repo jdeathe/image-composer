@@ -3,10 +3,10 @@
 # -----------------------------------------------------------------------------
 
 # Docker image/container settings
-DOCKER_IMAGE_TAG ?= 1.5.2-php70
+DOCKER_IMAGE_TAG ?= 1.5.6-php70
 
 # ------------------------------------------------------------------------------
 # Application container build arguments
 # ------------------------------------------------------------------------------
 PHP_PACKAGE_PREFIX ?= php70
-PHP_VERSION ?= 7.0.25
+PHP_VERSION ?= 7.0.26

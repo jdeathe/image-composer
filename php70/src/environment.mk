@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # Constants
 # -----------------------------------------------------------------------------
-BUILD_VARIANTS := php71 php70 php56
+BUILD_VARIANTS := php72 php71 php70 php56
 DOCKER_USER := jdeathe
 DOCKER_IMAGE_NAME := composer
 SHPEC_ROOT := test/shpec
@@ -16,7 +16,7 @@ DOCKER_IMAGE_RELEASE_TAG_PATTERN := ^[0-9]+\.[0-9]+\.[0-9]+-php[57][0-9]?$
 
 # Docker image/container settings
 DOCKER_CONTAINER_OPTS ?=
-DOCKER_IMAGE_TAG ?= 1.5.2-php70
+DOCKER_IMAGE_TAG ?= 1.5.6-php70
 DOCKER_RESTART_POLICY ?= no
 
 # Package install settings
@@ -39,10 +39,10 @@ COMPOSER_CACHE_DIR ?= /opt/getcomposer.org/var/cache
 COMPOSER_FILENAME ?= composer.phar
 COMPOSER_HOME ?= /opt/getcomposer.org/etc
 COMPOSER_INSTALL_PATH ?= /opt/getcomposer.org
-COMPOSER_VERSION ?= 1.5.2
+COMPOSER_VERSION ?= 1.5.6
 COMPOSER_WORKSPACE ?= /workspace
 PHP_PACKAGE_PREFIX ?= php70
-PHP_VERSION ?= 7.0.25
+PHP_VERSION ?= 7.0.26
 
 # ------------------------------------------------------------------------------
 # Application container configuration
