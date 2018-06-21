@@ -4,7 +4,7 @@
 
 Summary of release changes for Version 1
 
-### 1.0.2 - Unreleased
+### 1.0.2 - 2018-06-21
 
 - Adds the gd PHP extension.
 
