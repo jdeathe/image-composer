@@ -26,8 +26,11 @@ RUN \
 		--no-cache \
 		ca-certificates \
 		curl \
+		freetype \
 		git \
+		libjpeg-turbo \
 		libmcrypt \
+		libpng \
 		openssh \
 		openssl \
 	&& update-ca-certificates \
@@ -38,9 +41,12 @@ RUN \
 		automake \
 		bash \
 		curl-dev \
+		freetype-dev \
 		gcc \
 		g++ \
+		libjpeg-turbo-dev \
 		libmcrypt-dev \
+		libpng-dev \
 		make \
 		pcre-dev \
 		pkgconfig \
@@ -59,8 +65,15 @@ RUN \
 			docker-php-ext-install \
 				mcrypt; \
 		fi \
+	&& docker-php-ext-configure \
+		gd \
+			--with-gd \
+			--with-freetype-dir=/usr/include/ \
+			--with-png-dir=/usr/include/ \
+			--with-jpeg-dir=/usr/include/ \
 	&& docker-php-ext-install \
 		bcmath \
+		gd \
 		opcache \
 		zip \
 	&& mkdir -p \
