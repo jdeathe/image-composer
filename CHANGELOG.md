@@ -4,6 +4,10 @@
 
 Summary of release changes for Version 1
 
+### 1.0.2 - 2018-06-21
+
+- Adds the gd PHP extension.
+
 ### 1.0.1 - 2017-12-21
 
 - Adds correct repository URL to docker image's label metadata.
