@@ -2,7 +2,11 @@
 
 ## composer
 
-Summary of release changes for Version 1
+Summary of release changes.
+
+### 1.0.3 - Unreleased
+
+- Adds the soap PHP extension.
 
 ### 1.0.2 - 2018-06-21
 

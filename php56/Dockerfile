@@ -46,6 +46,7 @@ RUN \
 		libjpeg-turbo-dev \
 		libmcrypt-dev \
 		libpng-dev \
+		libxml2-dev \
 		make \
 		pcre-dev \
 		pkgconfig \
@@ -75,6 +76,8 @@ RUN \
 		gd \
 		opcache \
 		zip \
+		xml \
+		soap \
 	&& mkdir -p \
 		"${COMPOSER_WORKSPACE}" \
 	&& mkdir -p \
