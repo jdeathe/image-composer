@@ -1,36 +1,23 @@
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Constants
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 BUILD_VARIANTS := php72 php71 php70 php56
-DOCKER_USER := jdeathe
 DOCKER_IMAGE_NAME := composer
+DOCKER_IMAGE_RELEASE_TAG_PATTERN := ^[0-9]+\.[0-9]+\.[0-9]+-php[57][0-9]?$
+DOCKER_IMAGE_TAG_PATTERN := ^(latest|[0-9]+\.[0-9]+\.[0-9]+-php[57][0-9])?$
+DOCKER_USER := jdeathe
 SHPEC_ROOT := test/shpec
 
-# Tag validation patterns
-DOCKER_IMAGE_TAG_PATTERN := ^(latest|[0-9]+\.[0-9]+\.[0-9]+-php[57][0-9])?$
-DOCKER_IMAGE_RELEASE_TAG_PATTERN := ^[0-9]+\.[0-9]+\.[0-9]+-php[57][0-9]?$
-
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Variables
-# -----------------------------------------------------------------------------
-
-# Docker image/container settings
+# ------------------------------------------------------------------------------
+BIN_PREFIX ?= /usr/local
+DIST_PATH ?= ./dist
 DOCKER_CONTAINER_OPTS ?=
 DOCKER_IMAGE_TAG ?= latest
 DOCKER_RESTART_POLICY ?= no
-
-# Package install settings
-BIN_PREFIX ?= /usr/local
-WRAPPER_NAME ?= composer
-
-# Docker build --no-cache parameter
 NO_CACHE ?= false
-
-# Directory path for release packages
-DIST_PATH ?= ./dist
-
-# Number of seconds expected to complete container startup including bootstrap.
-STARTUP_TIME ?= 2
+WRAPPER_NAME ?= composer
 
 # ------------------------------------------------------------------------------
 # Application container build arguments
@@ -58,5 +45,5 @@ COMPOSER_PROCESS_TIMEOUT ?= 300
 COMPOSER_VENDOR_DIR ?= vendor
 HTTP_PROXY_REQUEST_FULLURI ?= 0
 HTTPS_PROXY_REQUEST_FULLURI ?= 0
-http_proxy ?= 
+http_proxy ?=
 no_proxy ?=
