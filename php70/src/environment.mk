@@ -18,7 +18,6 @@ DOCKER_IMAGE_TAG ?= 1.5.6-php70
 DOCKER_RESTART_POLICY ?= no
 NO_CACHE ?= false
 WRAPPER_NAME ?= composer
-STARTUP_TIME ?= 2
 
 # ------------------------------------------------------------------------------
 # Application container build arguments

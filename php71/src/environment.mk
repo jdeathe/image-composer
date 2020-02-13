@@ -19,7 +19,6 @@ DOCKER_CONTAINER_OPTS ?=
 DOCKER_IMAGE_TAG ?= 1.5.6-php71
 DOCKER_RESTART_POLICY ?= no
 NO_CACHE ?= false
-STARTUP_TIME ?= 2
 WRAPPER_NAME ?= composer
 
 # ------------------------------------------------------------------------------

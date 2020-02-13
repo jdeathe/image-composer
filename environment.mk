@@ -17,7 +17,6 @@ DOCKER_CONTAINER_OPTS ?=
 DOCKER_IMAGE_TAG ?= latest
 DOCKER_RESTART_POLICY ?= no
 NO_CACHE ?= false
-STARTUP_TIME ?= 2
 WRAPPER_NAME ?= composer
 
 # ------------------------------------------------------------------------------
