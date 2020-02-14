@@ -32,7 +32,7 @@ function __shpec_matcher_egrep ()
 
 function verify_build ()
 {
-	local -r composer_version="1.5.6"
+	local -r composer_version="1.8.6"
 	local -ra build_variants=(php56 php70 php71 php72)
 
 	local image_tag="latest"
