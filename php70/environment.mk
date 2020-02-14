@@ -7,4 +7,4 @@ DOCKER_IMAGE_TAG ?= 1.8.6-php70
 # Application container build arguments
 # ------------------------------------------------------------------------------
 PHP_PACKAGE_PREFIX ?= php70
-PHP_VERSION ?= 7.0.26
+PHP_VERSION ?= 7.0.33

@@ -54,7 +54,7 @@ $ composer -vvv -V
 
 Using the `PHP_VERSION` environment variable it's possible to be selective about the PHP version used with composer.
 
-To run composer with PHP 7.1 the `PHP_VERSION` environment variable should be set to either `71`, `7.1` or `7.1.12`.
+To run composer with PHP 7.1 the `PHP_VERSION` environment variable should be set to either `71`, `7.1` or `7.1.33`.
 
 ```
 $ PHP_VERSION=7.1 composer -vvv --version
