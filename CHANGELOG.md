@@ -8,6 +8,7 @@ Summary of release changes.
 
 - Adds the soap PHP extension.
 - Composer [1.8.6](https://github.com/composer/composer/releases/tag/1.8.6).
+- PHP versions: 5.6.40, 7.0.33, 7.1.33, 7.2.27.
 
 ### 1.0.2 - 2018-06-21
 
