@@ -7,6 +7,7 @@ Summary of release changes.
 ### 1.0.3 - Unreleased
 
 - Adds the soap PHP extension.
+- Composer [1.8.6](https://github.com/composer/composer/releases/tag/1.8.6).
 
 ### 1.0.2 - 2018-06-21
 
