@@ -74,6 +74,7 @@ RUN \
 			--with-jpeg-dir=/usr/include/ \
 	&& docker-php-ext-install \
 		bcmath \
+		calendar \
 		gd \
 		opcache \
 		zip \
