@@ -6,7 +6,9 @@ Summary of release changes.
 
 ### 1.0.3 - Unreleased
 
+- Adds the calendar PHP extension.
 - Adds the soap PHP extension.
+- Adds note on known issue with building when `COMPOSER_AUTH` is in use.
 - Composer [1.8.6](https://github.com/composer/composer/releases/tag/1.8.6).
 - PHP versions: 5.6.40, 7.0.33, 7.1.33, 7.2.27.
 
